@@ -1,33 +1,46 @@
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Scanner;
 
-public class Project5 {
-
-	static String filename;
-	static byte chosenByte;
-	static File file;
-	
-	public static void main(String[] args){
-		input();
-		file = new File(filename);
-		readFile();
-	}
-
-
-	private static void readFile(){
-		//TODO read file byte by byte and add the chosen byte to each bite
-	}
-
-
-	private static void input() {
+public class Project5{
+	public static void main(String args[]) {
 		Scanner input = new Scanner(System.in);
-		System.out.print("What is the name of the file you would like to encrypt: ");
-		filename = input.nextLine();
-		System.out.print("What byte would you like in the byte range -128 to 127: ");
-		//TODO catch error for range
-		chosenByte = input.nextByte();
+		System.out.println("What is the byte key: ");
+		byte key = input.nextByte();
+		System.out.println("What file would you like encrypted: ");
+		String fileName = input.next();
+		File file = new File(fileName);
+		FileInputStream fileInput = null;
+		FileOutputStream fileOutput = null;
+		
+		try {
+			fileInput = new FileInputStream(file);
+			byte fileContent[] = new byte[(int) file.length()];
+			fileInput.read(fileContent);
+			for(int i = 0; i < fileContent.length; i++) {
+				fileContent[i] = (byte) (fileContent[i] + key);
+			}
+		fileOutput = new FileOutputStream(file + ".encrypt");
+		fileOutput.write(fileContent);
+		}catch(FileNotFoundException e) {
+			System.out.println("File not found: " + e);
+		}catch(IOException ex) {
+			System.out.println("Exxception while reading file " + ex);
+		}finally {
+			try {
+				if(fileInput != null) {
+					fileInput.close();
+				}
+				if(fileOutput != null) {
+					fileOutput.close();
+				}
+			}catch(IOException e) {
+				System.out.println("Error while closing stream " + e);
+			}
+		}	
 	}
-
 }
-
