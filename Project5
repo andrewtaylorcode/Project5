@@ -29,7 +29,7 @@ public class Project5{
 		}catch(FileNotFoundException e) {
 			System.out.println("File not found: " + e);
 		}catch(IOException ex) {
-			System.out.println("Exxception while reading file " + ex);
+			System.out.println("Exception while reading file " + ex);
 		}finally {
 			try {
 				if(fileInput != null) {
